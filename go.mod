@@ -1,5 +1,5 @@
-module rutil
+module github.com/rohanthewiz/rutil
 
-go 1.21
+go 1.23.4
 
-require github.com/rohanthewiz/serr v1.2.2 // indirect
+require github.com/rohanthewiz/serr v1.2.2
