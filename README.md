@@ -7,3 +7,5 @@ Patch updates should not break your code
 ## The Utilities
 
 - `fileops/EnvFromFile` - Load environment variables from a file
+-  `fileops/ReadIni` - Read ini file
+    - Allows quotes and comments
