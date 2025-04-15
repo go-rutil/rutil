@@ -2,6 +2,7 @@ package fileops
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"strings"
 
@@ -17,8 +18,14 @@ func EnvFromFile(filespec string) (issues []serr.SErr, err error) {
 
 	scanner := bufio.NewScanner(file)
 
+	lineNbr := 0
 	for scanner.Scan() { // splits on lines by default
 		line := strings.TrimSpace(scanner.Text())
+		lineNbr++
+
+		if line == "" {
+			continue
+		}
 
 		if strings.HasPrefix(line, "#") { // skip lines starting with a comment
 			continue
@@ -32,13 +39,15 @@ func EnvFromFile(filespec string) (issues []serr.SErr, err error) {
 
 		key := strings.TrimSpace(bef)
 		if key == "" {
-			issues = append(issues, serr.NewSErr("key is empty", "line", line))
+			issues = append(issues, serr.NewSErr("key is empty", "line", line,
+				"lineNbr", fmt.Sprintf("%d", lineNbr)))
 			continue
 		}
 
 		val := strings.TrimSpace(aft)
 		if val == "" {
-			issues = append(issues, serr.NewSErr("Value is empty", "line", line))
+			issues = append(issues, serr.NewSErr("Value is empty", "line", line,
+				"lineNbr", fmt.Sprintf("%d", lineNbr)))
 			continue
 		}
 
@@ -61,11 +70,16 @@ func EnvFromFile(filespec string) (issues []serr.SErr, err error) {
 		}
 
 		if val == "" {
-			issues = append(issues, serr.NewSErr("Value is empty", "line", line))
+			issues = append(issues, serr.NewSErr("Value is empty", "line", line,
+				"lineNbr", fmt.Sprintf("%d", lineNbr)))
 			continue
 		}
 
-		os.Setenv(key, val)
+		err = os.Setenv(key, val)
+		if err != nil {
+			issues = append(issues, serr.NewSErr("Error setting environment variable", "key", key, "val", val,
+				"line", line, "lineNbr", fmt.Sprintf("%d", lineNbr)))
+		}
 	}
 
 	if err := scanner.Err(); err != nil {

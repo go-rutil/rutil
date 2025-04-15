@@ -20,8 +20,14 @@ func ReadIni(filespec string) (results map[string]string, issues []serr.SErr, er
 	scanner := bufio.NewScanner(file)
 	currSection := ""
 
+	lineNbr := 0
 	for scanner.Scan() { // splits on lines by default
 		line := strings.TrimSpace(scanner.Text())
+		lineNbr++
+
+		if line == "" {
+			continue
+		}
 
 		if strings.HasPrefix(line, "#") { // skip lines starting with a comment
 			continue
@@ -43,7 +49,7 @@ func ReadIni(filespec string) (results map[string]string, issues []serr.SErr, er
 		}
 
 		if currSection == "" {
-			fmt.Printf("It seems there is no section defined before this line:\n%q\n", line)
+			fmt.Printf("It seems there is no section defined before lineNbr: %d line:\n%q\n", lineNbr, line)
 			return results, issues, serr.NewSErr("Missing section header")
 		}
 
@@ -55,13 +61,13 @@ func ReadIni(filespec string) (results map[string]string, issues []serr.SErr, er
 
 		key := strings.TrimSpace(bef)
 		if key == "" {
-			issues = append(issues, serr.NewSErr("key is empty", "line", line))
+			issues = append(issues, serr.NewSErr("key is empty", "line", line, "lineNbr", fmt.Sprintf("%d", lineNbr)))
 			continue
 		}
 
 		val := strings.TrimSpace(aft)
 		if val == "" {
-			issues = append(issues, serr.NewSErr("Value is empty", "line", line))
+			issues = append(issues, serr.NewSErr("Value is empty", "line", line, "lineNbr", fmt.Sprintf("%d", lineNbr)))
 			continue
 		}
 
@@ -84,7 +90,7 @@ func ReadIni(filespec string) (results map[string]string, issues []serr.SErr, er
 		}
 
 		if val == "" {
-			issues = append(issues, serr.NewSErr("Value is empty", "line", line))
+			issues = append(issues, serr.NewSErr("Value is empty", "line", line, "lineNbr", fmt.Sprintf("%d", lineNbr)))
 			continue
 		}
 

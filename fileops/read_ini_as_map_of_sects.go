@@ -9,7 +9,8 @@ import (
 	"github.com/rohanthewiz/serr"
 )
 
-// ReadIniAsMapOfSections reads an ini file returning attributes as a map of sections to a map of key values
+// ReadIniAsMapOfSections reads an ini file returning attributes as a map of sections to a map of key values.
+// This is the better way to read an ini file
 func ReadIniAsMapOfSections(filespec string) (AttributesBySection map[string]map[string]string, issues []serr.SErr, err error) {
 	file, err := os.Open(filespec)
 	if err != nil {
@@ -23,8 +24,14 @@ func ReadIniAsMapOfSections(filespec string) (AttributesBySection map[string]map
 
 	scanner := bufio.NewScanner(file)
 
+	lineNbr := 0
 	for scanner.Scan() { // splits on lines by default
 		line := strings.TrimSpace(scanner.Text())
+		lineNbr++
+
+		if line == "" {
+			continue
+		}
 
 		if strings.HasPrefix(line, "#") { // skip lines starting with a comment
 			continue
@@ -55,7 +62,7 @@ func ReadIniAsMapOfSections(filespec string) (AttributesBySection map[string]map
 		}
 
 		if currSection == "" {
-			fmt.Printf("It seems there is no section defined before this line:\n%q\n", line)
+			fmt.Printf("It seems there is no section defined before lineNbr: %d, line:\n%q\n", lineNbr, line)
 			return AttributesBySection, issues, serr.NewSErr("Missing section header")
 		}
 
@@ -67,13 +74,13 @@ func ReadIniAsMapOfSections(filespec string) (AttributesBySection map[string]map
 
 		key := strings.TrimSpace(bef)
 		if key == "" {
-			issues = append(issues, serr.NewSErr("key is empty", "line", line))
+			issues = append(issues, serr.NewSErr("key is empty", "line", line, "lineNbr", fmt.Sprintf("%d", lineNbr)))
 			continue
 		}
 
 		val := strings.TrimSpace(aft)
 		if val == "" {
-			issues = append(issues, serr.NewSErr("Value is empty", "line", line))
+			issues = append(issues, serr.NewSErr("Value is empty", "line", line, "lineNbr", fmt.Sprintf("%d", lineNbr)))
 			continue
 		}
 
@@ -96,7 +103,7 @@ func ReadIniAsMapOfSections(filespec string) (AttributesBySection map[string]map
 		}
 
 		if val == "" {
-			issues = append(issues, serr.NewSErr("Value is empty", "line", line))
+			issues = append(issues, serr.NewSErr("Value is empty", "line", line, "lineNbr", fmt.Sprintf("%d", lineNbr)))
 			continue
 		}
 

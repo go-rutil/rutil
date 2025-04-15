@@ -79,6 +79,22 @@ key2 = value2`,
 			expectedIssues: 1,
 		},
 		{
+			name: "with blank lines",
+			content: `
+[section1]
+key1 = 
+
+key2 = value2
+`,
+			expectedMap: map[string]map[string]string{
+				"section1": {
+					"key2": "value2",
+				},
+			},
+			expectError:    false,
+			expectedIssues: 1,
+		},
+		{
 			name: "missing section",
 			content: `key1 = value1
 key2 = value2`,
