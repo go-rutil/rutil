@@ -76,7 +76,7 @@ key2 = value2`,
 				},
 			},
 			expectError:    false,
-			expectedIssues: 1,
+			expectedIssues: 0,
 		},
 		{
 			name: "with blank lines",
@@ -92,7 +92,7 @@ key2 = value2
 				},
 			},
 			expectError:    false,
-			expectedIssues: 1,
+			expectedIssues: 0,
 		},
 		{
 			name: "missing section",

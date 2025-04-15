@@ -66,8 +66,10 @@ func ReadIni(filespec string) (results map[string]string, issues []serr.SErr, er
 		}
 
 		val := strings.TrimSpace(aft)
+
+		// Don't make an issue of empty values
 		if val == "" {
-			issues = append(issues, serr.NewSErr("Value is empty", "line", line, "lineNbr", fmt.Sprintf("%d", lineNbr)))
+			// issues = append(issues, serr.NewSErr("Value is empty", "line", line, "lineNbr", fmt.Sprintf("%d", lineNbr)))
 			continue
 		}
 
@@ -89,8 +91,9 @@ func ReadIni(filespec string) (results map[string]string, issues []serr.SErr, er
 			}
 		}
 
+		// Don't make an issue of empty values
 		if val == "" {
-			issues = append(issues, serr.NewSErr("Value is empty", "line", line, "lineNbr", fmt.Sprintf("%d", lineNbr)))
+			// issues = append(issues, serr.NewSErr("Value is empty", "line", line, "lineNbr", fmt.Sprintf("%d", lineNbr)))
 			continue
 		}
 

@@ -79,8 +79,11 @@ func ReadIniAsMapOfSections(filespec string) (AttributesBySection map[string]map
 		}
 
 		val := strings.TrimSpace(aft)
+
+		// Don't make an issue of empty values
+
 		if val == "" {
-			issues = append(issues, serr.NewSErr("Value is empty", "line", line, "lineNbr", fmt.Sprintf("%d", lineNbr)))
+			// issues = append(issues, serr.NewSErr("Value is empty", "line", line, "lineNbr", fmt.Sprintf("%d", lineNbr)))
 			continue
 		}
 
@@ -102,8 +105,9 @@ func ReadIniAsMapOfSections(filespec string) (AttributesBySection map[string]map
 			}
 		}
 
+		// Don't make an issue of empty values
 		if val == "" {
-			issues = append(issues, serr.NewSErr("Value is empty", "line", line, "lineNbr", fmt.Sprintf("%d", lineNbr)))
+			// issues = append(issues, serr.NewSErr("Value is empty", "line", line, "lineNbr", fmt.Sprintf("%d", lineNbr)))
 			continue
 		}
 
