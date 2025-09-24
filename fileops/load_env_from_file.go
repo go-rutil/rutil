@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/rohanthewiz/serr"
+	"github.com/go-serr/serr"
 )
 
 // EnvFromFile reads a `*.env` style file and loads into the environment

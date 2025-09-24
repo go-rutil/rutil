@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/rohanthewiz/serr"
+	"github.com/go-serr/serr"
 )
 
 // ReadIni reads an ini file returning keys scoped by section and their values as a map

@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/rohanthewiz/serr"
+	"github.com/go-serr/serr"
 )
 
 // ReadIniAsMapOfSections reads an ini file returning attributes as a map of sections to a map of key values.
